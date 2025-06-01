@@ -33,6 +33,7 @@ namespace habilitations2024.view
         /// Controleur de la fenêtre
         /// </summary>
         private FrmHabilitationsController controller;
+        private object cboFiltreProfil;
 
         /// <summary>
         /// construction des composants graphiques et appel des autres initialisations
@@ -61,7 +62,8 @@ namespace habilitations2024.view
         /// </summary>
         private void RemplirListeDeveloppeurs()
         {
-            List<Developpeur> lesDeveloppeurs = controller.GetLesDeveloppeurs();
+            String unProfil = cboFiltreProfil.SelectedItem.ToString();
+            List<Developpeur> lesDeveloppeurs = controller.GetLesDeveloppeurs(unProfil);
             bdgDeveloppeurs.DataSource = lesDeveloppeurs;
             dgvDeveloppeurs.DataSource = bdgDeveloppeurs;
             dgvDeveloppeurs.Columns["iddeveloppeur"].Visible = false;
@@ -78,12 +80,29 @@ namespace habilitations2024.view
             bdgProfils.DataSource = lesProfils;
             cboProfil.DataSource = bdgProfils;
         }
+        ///<summary>
+        ///<summary>
+        private void RemplirListeFiltreProfils()
+        {
+            List<Profil> lesProfils = controller.GetLesProfils();
+            cboFiltreProfil.Items.Clear();
+            cboFiltreProfil.Items.Add("");
+            foreach (Profil unProfil in lesProfils)
+            {
+                cboFiltreProfil.Items.Add(unProfil.ToString());
+            }
+            cboFiltreProfil.SelectedIndex = 0;
+        }
 
         /// <summary>
         ///  Demande de modification d'un développeur
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void cboFiltreProfil_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RemplirListeDeveloppeurs();
+        }
         private void BtnDemandeModifDev_Click(object sender, EventArgs e)
         {
             if (dgvDeveloppeurs.SelectedRows.Count > 0)
@@ -254,5 +273,14 @@ namespace habilitations2024.view
             txtPwd2.Text = "";
         }
 
+        private void dgvDeveloppeurs_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void grbLesDeveloppeurs_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
